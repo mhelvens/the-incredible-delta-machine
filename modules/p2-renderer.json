@@ -1,0 +1,7 @@
+{
+  "type": "external-library",
+  "name": "p2-renderer",
+  "dir": "p2js/build",
+  "file": "p2.renderer.js"
+
+}

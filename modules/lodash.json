@@ -1,0 +1,10 @@
+{
+  "type": "external-library",
+  "external": true,
+  "name": "lodash",
+  "dir": "lodash/dist",
+  "file": "lodash.js"
+  
+      , "var": "_"
+  
+}

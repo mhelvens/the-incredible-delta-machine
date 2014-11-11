@@ -1,0 +1,23 @@
+{
+  "name": "tidem",
+  "version": "0.1.0",
+  "description": "The Incredible Delta Machine",
+  "authors": [
+    {
+      "name": "Michiel Helvensteijn",
+      "email": "mhelvens@gmail.com"
+    }
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "~2.3.11",
+    "lodash": "~2.4.1",
+    "jquery": "~2.1.1",
+    "p2js": "~0.6.0",
+    "delta.js": "~0.2.3",
+    "js-graph": "~0.4.0"
+  },
+  "devDependencies": {
+    "jquery": "~2.1.1"
+  }
+}
