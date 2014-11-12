@@ -186,14 +186,22 @@ require(['jquery', 'delta-js', './index.scss'], ($, DeltaJs)=> {
 			var greenButtonTexture = PIXI.Texture.fromImage(require('./img/green-button.png'));
 
 			/* trigger callback on begin contact */
+			var enabled = true;
 			world.on("beginContact", (event) => {
 				if ((event.bodyA === body || event.bodyB === body)) {
-					sprite.setTexture(greenButtonTexture);
-					onActivation(event.bodyA === body ? event.bodyB : event.bodyA);
+					if (enabled) {
+						sprite.setTexture(greenButtonTexture);
+						onActivation(event.bodyA === body ? event.bodyB : event.bodyA);
+					}
 				}
 			});
+			function enable() { enabled = true }
+			function disable() { enabled = false }
 
-			return { body, sprite, material, shape };
+			enable();
+
+
+			return { body, sprite, material, shape, enable, disable };
 
 		}
 
@@ -344,12 +352,21 @@ require(['jquery', 'delta-js', './index.scss'], ($, DeltaJs)=> {
 
 			/* cannon action! */
 			body.allowSleep = false;
-			newButton({
+			var {enable, disable} = newButton({
 				position: [position[0] - direction * 0.4, position[1] - 0.4],
 				onActivation(cannonBall) {
+					disable();
 					setTimeout(() => {
-						cannonBall.force = [direction * force, force];
-					}, 1000);
+						cannonBall.type = p2.Body.STATIC;
+						setTimeout(() => {
+							cannonBall.wakeUp();
+							cannonBall.type = p2.Body.DYNAMIC;
+							cannonBall.force = [direction * force, force];
+							setTimeout(() => {
+								enable();
+							}, 100);
+						}, 1000);
+					}, 100);
 				}
 			});
 
@@ -414,9 +431,7 @@ require(['jquery', 'delta-js', './index.scss'], ($, DeltaJs)=> {
 
 		new dm.Delta('initial-bowling-ball', { if: true }).insert('addArtefacts', function () {
 			if (dm.vp('startMachine', true)) {
-				setTimeout(() => {
-					newBowlingBall({ position: [0, 6.3] });
-				}, 1000);
+				newBowlingBall({ position: [0, 6.3] });
 			}
 		});
 
@@ -444,7 +459,7 @@ require(['jquery', 'delta-js', './index.scss'], ($, DeltaJs)=> {
 			newConveyorBeltSystem({
 				conveyorBeltPosition: [-3, 0],
 				length: 2,
-				surfaceVelocity: 1.3,
+				surfaceVelocity: 2,
 				translateConveyorBeltSprite: [0, 1.3],
 				buttonPosition: [-0.4, dm.vp('conveyorBeltButtonHeight', 1)],
 				localButtonAnchor: [-0.2, -0.2],
@@ -464,7 +479,7 @@ require(['jquery', 'delta-js', './index.scss'], ($, DeltaJs)=> {
 			newConveyorBeltSystem({
 				conveyorBeltPosition: [3, 0],
 				length: 2,
-				surfaceVelocity: -1.3,
+				surfaceVelocity: -2,
 				translateConveyorBeltSprite: [0, 1.3],
 				buttonPosition: [0.4, dm.vp('conveyorBeltButtonHeight', 1)],
 				localButtonAnchor: [0.2, -0.2],
@@ -490,7 +505,7 @@ require(['jquery', 'delta-js', './index.scss'], ($, DeltaJs)=> {
 			newConveyorBeltSystem({
 				conveyorBeltPosition: [1, 0],
 				length: 2,
-				surfaceVelocity: -1,
+				surfaceVelocity: -2,
 				translateConveyorBeltSprite: [0, 1.3],
 				buttonPosition: [0.4, dm.vp('conveyorBeltButtonHeight', 1)],
 				localButtonAnchor: [-0.1, -0.28],
@@ -521,18 +536,18 @@ require(['jquery', 'delta-js', './index.scss'], ($, DeltaJs)=> {
 
 		dm.select(
 				'left-goal',
-				'left-facing-trampoline'
+				//'left-facing-trampoline',
 
-				//'right-goal',
-				//'right-shooting-cannon',
-				//'left-turning-conveyor-belt'
-				//
-				//'left-shooting-cannon',
-				//'right-turning-conveyor-belt',
+				'right-goal',
+				'right-shooting-cannon',
+				'left-turning-conveyor-belt',
+
+				'left-shooting-cannon',
+				'right-turning-conveyor-belt',
 				//
 				//'reposition-conveyor-belt-buttons',  // for trampoline / cannon conflict
 				//
-				//'second-right-turning-conveyor-belt' // for bad feature interaction
+				'second-right-turning-conveyor-belt' // for bad feature interaction
 
 		);
 
