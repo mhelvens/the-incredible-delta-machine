@@ -9,6 +9,13 @@
 
     <script src="./index.js"></script>
 
+    <style>
+        td {
+            border: solid 1px black;
+            padding: 5px 8px 5px 5px;
+        }
+    </style>
+
 </head>
 <body>
 
@@ -25,16 +32,41 @@
     top: 50px;
     margin: 0;
     padding: 0;">
-    <label><input type="checkbox" id="left-goal" checked="checked"> left-goal</label><br>
-    <label><input type="checkbox" id="left-facing-trampoline"> left-facing-trampoline</label><br>
-    <label><input type="checkbox" id="right-goal"> right-goal</label><br>
-    <label><input type="checkbox" id="right-shooting-cannon"> right-shooting-cannon</label><br>
-    <label><input type="checkbox" id="left-turning-conveyor-belt"> left-turning-conveyor-belt</label><br>
-    <label><input type="checkbox" id="left-shooting-cannon"> left-shooting-cannon</label><br>
-    <label><input type="checkbox" id="right-turning-conveyor-belt"> right-turning-conveyor-belt</label><br>
-    <label><input type="checkbox" id="reposition-conveyor-belt-buttons"> reposition-conveyor-belt-buttons</label><br>
-    <label><input type="checkbox" id="second-right-turning-conveyor-belt"> second-right-turning-conveyor-belt</label><br><br>
-    <button id="OK" onclick="start()">OK</button>
+
+    <table>
+        <tr>
+            <td>
+                <label><input type="checkbox" id="left-goal" checked="checked"> left-goal</label>
+            </td>
+            <td>
+                <label><input type="checkbox" id="right-goal"> right-goal</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label><input type="checkbox" id="left-facing-trampoline"> left-facing-trampoline</label><br>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label><input type="checkbox" id="left-shooting-cannon"> left-shooting-cannon</label><br>
+                <label><input type="checkbox" id="right-turning-conveyor-belt"> right-turning-conveyor-belt</label>
+            </td>
+            <td>
+                <label><input type="checkbox" id="right-shooting-cannon"> right-shooting-cannon</label><br>
+                <label><input type="checkbox" id="left-turning-conveyor-belt"> left-turning-conveyor-belt</label>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <label><input type="checkbox" id="reposition-conveyor-belt-buttons"> reposition-conveyor-belt-buttons</label><br>
+                <label><input type="checkbox" id="second-right-turning-conveyor-belt"> second-right-turning-conveyor-belt</label>
+            </td>
+        </tr>
+    </table>
+
+    <button id="OK" style="margin: 3px;" onclick="start()">OK</button>
+
 </div>
 
 </body>

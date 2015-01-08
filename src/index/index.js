@@ -431,15 +431,6 @@ require(['jquery', 'delta-js', './index.scss'], ($, DeltaJs)=> {
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-		new dm.Delta('initial-bowling-ball', { if: true }).insert('addArtefacts', function () {
-			if (dm.vp('startMachine', true)) {
-				var {body} = newBowlingBall({ position: [0, 6.3] });
-				body.sleep();
-				$('h1').click(() => {
-					body.wakeUp();
-				});
-			}
-		});
 
 		new dm.Delta('left-goal', {}).insert('addArtefacts', function () {
 			newGoal({ position: [-4, 5] });
@@ -504,7 +495,27 @@ require(['jquery', 'delta-js', './index.scss'], ($, DeltaJs)=> {
 
 
 
-		new dm.Delta('reposition-conveyor-belt-buttons', {}).replace('conveyorBeltButtonHeight', 2);
+		new dm.Delta('conflict-indicator', { resolves: ['left-facing-trampoline', 'left-turning-conveyor-belt'] }).insert('addArtefacts', function () {
+			if (!conflictResolved) {
+				startMachine = false;
+				setTimeout(() => {
+						var {shape} = newRectangle({
+							image: require('./img/error.png'),
+							position: [0, 1],
+							width: 2.5,
+							height: 2.5,
+							mass: 0
+						});
+						shape.sensor = true;
+				}, 3000);
+			}
+		});
+
+
+		var conflictResolved = false;
+		new dm.Delta('reposition-conveyor-belt-buttons', {}).prepend('addArtefacts', function () {
+			conflictResolved = true;
+		}).replace('conveyorBeltButtonHeight', 2);
 
 
 		new dm.Delta('second-right-turning-conveyor-belt', {}).insert('addArtefacts', function () {
@@ -520,21 +531,17 @@ require(['jquery', 'delta-js', './index.scss'], ($, DeltaJs)=> {
 		}).remove('rightSittingBowlingBall');
 
 
-
-
-		new dm.Delta('conflict-indicator', { resolves: ['left-facing-trampoline', 'left-turning-conveyor-belt'] }).insert('addArtefacts', function () {
-			setTimeout(() => {
-				var {shape} = newRectangle({
-					image: require('./img/error.png'),
-					position: [0, 1],
-					width: 2.5,
-					height: 2.5,
-					mass: 0
+		/* start machine */
+		var startMachine = true;
+		new dm.Delta('initial-bowling-ball', { if: true }).append('addArtefacts', function () {
+			if (startMachine) {
+				var {body} = newBowlingBall({ position: [0, 6.3] });
+				body.sleep();
+				$('h1').click(() => {
+					body.wakeUp();
 				});
-				shape.sensor = true;
-			}, 5000);
-		}).replace('startMachine', false);
-
+			}
+		});
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
